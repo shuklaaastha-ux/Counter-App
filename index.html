@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Counter App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      min-height: 100vh;
+      background-color: #344151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .count-display {
+      font-size: 7rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1;
+      min-width: 200px;
+      text-align: center;
+      transition: color 0.25s ease, transform 0.12s ease;
+      user-select: none;
+    }
+
+    .count-display.positive { color: #5dcaa5; }
+    .count-display.negative { color: #f09595; }
+    .count-display.bump { transform: scale(1.08); }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .btn-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s, filter 0.15s;
+      outline: none;
+    }
+    .btn-circle:active { transform: scale(0.91); }
+    .btn-circle:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.4); }
+
+    .btn-dec { background: #f09595; color: #501313; }
+    .btn-dec:hover { filter: brightness(1.1); }
+
+    .btn-inc { background: #5dcaa5; color: #04342c; }
+    .btn-inc:hover { filter: brightness(1.1); }
+
+    .step-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .step-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .step-btns { display: flex; gap: 0.4rem; }
+
+    .step-btn {
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(255,255,255,0.22);
+      background: transparent;
+      color: rgba(255,255,255,0.55);
+      font-family: "Poppins", sans-serif;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .step-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .step-btn.active {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border-color: rgba(255,255,255,0.55);
+    }
+
+    .btn-reset {
+      padding: 10px 36px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.65);
+      font-family: "Poppins", sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      letter-spacing: 0.05em;
+    }
+    .btn-reset:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border-color: rgba(255,255,255,0.5);
+    }
+    .btn-reset:active { transform: scale(0.97); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <p class="title">Counter</p>
+  <div class="count-display" id="display">0</div>
+
+  <div class="btn-row">
+    <button class="btn-circle btn-dec" onclick="change(-1)" aria-label="Decrement">−</button>
+    <button class="btn-circle btn-inc" onclick="change(1)" aria-label="Increment">+</button>
+  </div>
+
+  <div class="step-row">
+    <span class="step-label">Step</span>
+    <div class="step-btns" id="stepBtns">
+      <button class="step-btn active" data-val="1" onclick="setStep(1)">1</button>
+      <button class="step-btn" data-val="5" onclick="setStep(5)">5</button>
+      <button class="step-btn" data-val="10" onclick="setStep(10)">10</button>
+      <button class="step-btn" data-val="100" onclick="setStep(100)">100</button>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="reset()">Reset</button>
+</div>
+
+<script>
+  let count = 0;
+  let step = 1;
+
+  const display = document.getElementById('display');
+
+  function update() {
+    display.textContent = count;
+    display.className = 'count-display' + (count > 0 ? ' positive' : count < 0 ? ' negative' : '');
+    display.classList.add('bump');
+    setTimeout(() => display.classList.remove('bump'), 120);
+  }
+
+  function change(dir) {
+    count += dir * step;
+    update();
+  }
+
+  function reset() {
+    count = 0;
+    update();
+  }
+
+  function setStep(val) {
+    step = val;
+    document.querySelectorAll('.step-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.val) === val);
+    });
+  }
+</script>
+</body>
+</html>
