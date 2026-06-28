@@ -25,6 +25,6 @@ The counter value lives in a centralized **Redux store**. A `counterSlice` defin
 - **Redux Toolkit** — Global state management
 - **Tailwind CSS** — Utility-first styling
 - **Poppins Font** — Clean, modern typography
-- 
+
 # Author
 Aastha Shukla
